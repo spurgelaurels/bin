@@ -4,10 +4,34 @@ exec 1> >(logger -s -t $(basename $0)) 2>&1
 export DISPLAY=:0.0
 position=left
 
-
+# This is used to determine which external display you have connected
+# This may vary between OS. e.g VGA1 instead of VGA-1
+if [ `xrandr | grep VGA-1 | grep -c ' connected '` -eq 1 ]; then
+        extern="VGA-1"
+fi
+if [ `xrandr | grep DVI-1 | grep -c ' connected '` -eq 1 ]; then
+        extern="DVI-1"
+fi
+if [ `xrandr | grep HDMI-1 | grep -c ' connected '` -eq 1 ]; then
+        extern="HDMI-1"
+fi
+if [ `xrandr | grep HDMI-2 | grep -c ' connected '` -eq 1 ]; then
+        extern="HDMI-2"
+fi
+if [ `xrandr | grep HDMI-3 | grep -c ' connected '` -eq 1 ]; then
+        extern="HDMI-3"
+fi
+if [ `xrandr | grep DP1 | grep -c ' connected '` -eq 1 ]; then
+        extern="DP-1"
+fi
+if [ `xrandr | grep DP-2 | grep -c ' connected '` -eq 1 ]; then
+        extern="DP-2"
+fi
+if [ `xrandr | grep DP-3 | grep -c ' connected '` -eq 1 ]; then
+        extern="DP-3"
+fi
 
 intern=eDP-1
-extern=DP-1
 #extern=`xrandr --listmonitors | grep "^ 1" | awk '{print $4}'`
 
 
@@ -57,7 +81,7 @@ if xrandr | grep "$extern disconnected"; then
   laptop
 
 
-elif grep "closed" /proc/acpi/button/lid/LID0/state ; then
+elif grep "closed" /proc/acpi/button/lid/LID/state ; then
   echo "Lid closed, external assumed"
 #  polybar_config=~/.config/polybar/config-SMALL.ini
   external
